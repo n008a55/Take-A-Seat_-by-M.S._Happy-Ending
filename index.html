@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>take your seat for this ending</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            user-select: none;
+            cursor: none;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <video id="lockVideo" autoplay loop muted playsinline>
+        <source src="willyoubehereforme.mp4" type="video/mp4">
+    </video>
+
+    <script>
+        const video = document.getElementById('lockVideo');
+
+
+        video.addEventListener('pause', () => {
+            video.play();
+        });
+
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        document.addEventListener('keydown', (event) => {
+            const blockedKeys = ['Space', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Escape', 'Tab'];
+            if (blockedKeys.includes(event.code)) {
+                event.preventDefault();
+            }
+        });
+    </script>
+
+</body>
+</html>

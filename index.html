@@ -51,8 +51,8 @@
             min-width: 180px;
             padding: 16px 36px;
             background: rgba(0, 0, 0, 0.92);
-            color: #ffbf72;
-            border: 1px solid rgb(255, 188, 87);
+            color: #f9bc94;
+            border: 1px solid rgb(250, 205, 146);
             border-radius: 999px;
             text-decoration: none;
             font-size: 1.1rem;
@@ -66,6 +66,23 @@
             background: #111;
             transform: translateX(-50%) translateY(-1px);
         }
+        .bounce-counter {
+            position: fixed;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 30;
+            padding: 10px 18px;
+            border-radius: 999px;
+            border: 1px solid rgb(255, 218, 162);
+            background: rgba(0, 0, 0, 0.38);
+            color: #f9bc94;
+            font-size: clamp(0.9rem, 1.6vw, 1.3rem);
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body>
@@ -74,6 +91,7 @@
         <source src="willyoubehereforme.mp4" type="video/mp4">
     </video>
 
+    <div id="bounceCounter" class="bounce-counter" aria-live="polite">Border Bounces: 0</div>
     <div id="character" class="character" aria-label="character"></div>
 
     <a href="https://www.youtube.com/@makuroon99?sub_confirmation=1" class="entry-button" target="_blank" rel="noopener noreferrer">入場</a>
@@ -81,6 +99,7 @@
     <script>
         const video = document.getElementById('lockVideo');
         const character = document.getElementById('character');
+        const bounceCounter = document.getElementById('bounceCounter');
 
         const state = {
             x: 120,
@@ -92,8 +111,24 @@
             gravity: 0.45,
             dragging: false,
             dragOffsetX: 0,
-            dragOffsetY: 0
+            dragOffsetY: 0,
+            bounceCount: 0,
+            bounceCooldown: 0
         };
+
+        function updateBounceCounter() {
+            bounceCounter.textContent = `Border Bounces: ${state.bounceCount}`;
+        }
+
+        function registerBounce(hitCount = 1) {
+            if (state.bounceCooldown > 0) {
+                return;
+            }
+
+            state.bounceCount += hitCount;
+            state.bounceCooldown = 4;
+            updateBounceCounter();
+        }
 
         function clampCharacter() {
             state.x = Math.max(0, Math.min(window.innerWidth - state.width, state.x));
@@ -106,32 +141,46 @@
 
         function animate() {
             if (!state.dragging) {
+                if (state.bounceCooldown > 0) {
+                    state.bounceCooldown -= 1;
+                }
+
                 state.vy += state.gravity;
                 state.x += state.vx;
                 state.y += state.vy;
 
+                let boundaryHits = 0;
+
                 if (state.x <= 0) {
                     state.x = 0;
                     state.vx = Math.abs(state.vx) * 0.8;
+                    boundaryHits += 1;
                 }
 
                 if (state.x + state.width >= window.innerWidth) {
                     state.x = window.innerWidth - state.width;
                     state.vx = -Math.abs(state.vx) * 0.8;
+                    boundaryHits += 1;
                 }
 
                 if (state.y <= 0) {
                     state.y = 0;
                     state.vy = Math.abs(state.vy) * 0.6;
+                    boundaryHits += 1;
                 }
 
                 if (state.y + state.height >= window.innerHeight) {
                     state.y = window.innerHeight - state.height;
                     state.vy = -Math.abs(state.vy) * 0.7;
                     state.vx *= 0.985;
+                    boundaryHits += 1;
                     if (Math.abs(state.vy) < 0.2) {
                         state.vy = 0;
                     }
+                }
+
+                if (boundaryHits > 0) {
+                    registerBounce(boundaryHits);
                 }
 
                 clampCharacter();
@@ -191,6 +240,7 @@
             render();
         });
 
+        updateBounceCounter();
         render();
         requestAnimationFrame(animate);
     </script>

@@ -113,7 +113,13 @@
             dragOffsetX: 0,
             dragOffsetY: 0,
             bounceCount: 0,
-            bounceCooldown: 0
+            bounceCooldown: 0,
+            touching: {
+                left: false,
+                right: false,
+                top: false,
+                bottom: false
+            }
         };
 
         function updateBounceCounter() {
@@ -154,29 +160,49 @@
                 if (state.x <= 0) {
                     state.x = 0;
                     state.vx = Math.abs(state.vx) * 0.8;
-                    boundaryHits += 1;
+                    if (!state.touching.left) {
+                        boundaryHits += 1;
+                    }
+                    state.touching.left = true;
+                } else {
+                    state.touching.left = false;
                 }
 
                 if (state.x + state.width >= window.innerWidth) {
                     state.x = window.innerWidth - state.width;
                     state.vx = -Math.abs(state.vx) * 0.8;
-                    boundaryHits += 1;
+                    if (!state.touching.right) {
+                        boundaryHits += 1;
+                    }
+                    state.touching.right = true;
+                } else {
+                    state.touching.right = false;
                 }
 
                 if (state.y <= 0) {
                     state.y = 0;
                     state.vy = Math.abs(state.vy) * 0.6;
-                    boundaryHits += 1;
+                    if (!state.touching.top) {
+                        boundaryHits += 1;
+                    }
+                    state.touching.top = true;
+                } else {
+                    state.touching.top = false;
                 }
 
                 if (state.y + state.height >= window.innerHeight) {
                     state.y = window.innerHeight - state.height;
                     state.vy = -Math.abs(state.vy) * 0.7;
                     state.vx *= 0.985;
-                    boundaryHits += 1;
+                    if (!state.touching.bottom) {
+                        boundaryHits += 1;
+                    }
+                    state.touching.bottom = true;
                     if (Math.abs(state.vy) < 0.2) {
                         state.vy = 0;
                     }
+                } else {
+                    state.touching.bottom = false;
                 }
 
                 if (boundaryHits > 0) {

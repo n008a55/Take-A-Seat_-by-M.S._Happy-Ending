@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="google-site-verification" content="Y4mEOrRYhl4g7ukwe71vTg7ZTyp-IwpnG5eC8Vot4dE" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>take your seat for this ending</title>
@@ -22,6 +21,32 @@
             object-fit: contain;
             pointer-events: none;
         }
+        .entry-button {
+            position: fixed;
+            left: 50%;
+            bottom: 28px;
+            transform: translateX(-50%);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 180px;
+            padding: 16px 36px;
+            background: rgba(0, 0, 0, 0.92);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            border-radius: 999px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+            z-index: 10;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+        .entry-button:hover {
+            background: #111;
+            transform: translateX(-50%) translateY(-1px);
+        }
     </style>
 </head>
 <body>
@@ -29,6 +54,8 @@
     <video id="lockVideo" autoplay loop muted playsinline>
         <source src="willyoubehereforme.mp4" type="video/mp4">
     </video>
+
+    <a href="https://www.youtube.com/@makuroon99?sub_confirmation=1" class="entry-button" target="_blank" rel="noopener noreferrer">入場</a>
 
     <script>
         const video = document.getElementById('lockVideo');
